@@ -13,10 +13,12 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   List<Map<String, String>> datas = [];
+  late int _currentPageIndex;
 
   @override
   void initState(){
     super.initState();
+    _currentPageIndex =  0;
     datas = [
             {
         "cid": "1",
@@ -173,11 +175,44 @@ class _HomeState extends State<Home> {
       itemCount: 10,
     );
   }
+
+  BottomNavigationBarItem _bottomNavigationBarItem(String iconName, String label){
+    return BottomNavigationBarItem(
+      icon: Padding(
+        padding: const EdgeInsets.only(bottom: 3),
+        child: SvgPicture.asset("assets/svg/${iconName}_off.svg", width: 22,),
+      ),
+      label: label,
+    );
+  }
+
+  Widget bottomNavigationVarWidget(){
+    return BottomNavigationBar(
+      // 애니메이션 효과 type 설정
+      type: BottomNavigationBarType.fixed,
+      onTap: (int index){
+        setState(() {
+          _currentPageIndex = index;
+        });
+      },
+      currentIndex: _currentPageIndex,
+      selectedItemColor: Colors.red,
+      items: [
+        _bottomNavigationBarItem("home", "홈"),
+        _bottomNavigationBarItem("notes", "동네생활"),
+        _bottomNavigationBarItem("location", "내 근처"),
+        _bottomNavigationBarItem("chat", "채팅"),
+        _bottomNavigationBarItem("user", "나의 당근"),
+      ]
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: mainAppBar(),
       body: _bodyWidget(),
+      bottomNavigationBar: bottomNavigationVarWidget(),
     );
   }
 }
